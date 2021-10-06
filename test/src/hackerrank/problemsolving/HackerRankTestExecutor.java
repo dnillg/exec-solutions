@@ -1,8 +1,12 @@
 package hackerrank.problemsolving;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HackerRankTestExecutor {
 
@@ -22,13 +26,17 @@ public class HackerRankTestExecutor {
 
     public String execute() {
         try {
-            String resourcePath = "/" + sutClass.getPackageName()
-                .replace(".", "/") + "/" + sutClass.getSimpleName() + "/" + testCaseName + "_input.txt";
-            final String inputFilePath = new File(getClass().getResource(resourcePath).toURI()).toPath().toAbsolutePath().toString();
-            System.setIn(getClass().getResourceAsStream(resourcePath));
+            final String resourceFolderPath = sutClass.getPackageName()
+                .replace(".", "/") + "/" + sutClass.getSimpleName() + "/";
+            String inputResourcePath = "/" + resourceFolderPath + testCaseName + "_input.txt";
+            String expectedOutputResourcePath = "/" + resourceFolderPath + testCaseName + "_output.txt";
+            System.setIn(getClass().getResourceAsStream(inputResourcePath));
             final Method mainMethod = sutClass.getMethod("main", String[].class);
             mainMethod.invoke(null, new Object[]{new String[0]});
-            return new String(Files.readAllBytes(new File(System.getenv("OUTPUT_PATH")).toPath()));
+            final String actualOutputStr = new String(Files.readAllBytes(new File(System.getenv("OUTPUT_PATH")).toPath()));
+            final String expectedOutput = new String(Files.readAllBytes(new File(getClass().getResource(expectedOutputResourcePath).toURI()).toPath()));
+            assertEquals(expectedOutput, actualOutputStr);
+            return actualOutputStr;
         } catch (Exception e) {
             throw new RuntimeException("Test case failed!", e);
         }
