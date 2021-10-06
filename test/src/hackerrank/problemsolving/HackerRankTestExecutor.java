@@ -33,13 +33,17 @@ public class HackerRankTestExecutor {
             System.setIn(getClass().getResourceAsStream(inputResourcePath));
             final Method mainMethod = sutClass.getMethod("main", String[].class);
             mainMethod.invoke(null, new Object[]{new String[0]});
-            final String actualOutputStr = new String(Files.readAllBytes(new File(System.getenv("OUTPUT_PATH")).toPath()));
-            final String expectedOutput = new String(Files.readAllBytes(new File(getClass().getResource(expectedOutputResourcePath).toURI()).toPath()));
+            final String actualOutputStr = trim(new String(Files.readAllBytes(new File(System.getenv("OUTPUT_PATH")).toPath())));
+            final String expectedOutput = trim(new String(Files.readAllBytes(new File(getClass().getResource(expectedOutputResourcePath).toURI()).toPath())));
             assertEquals(expectedOutput, actualOutputStr);
             return actualOutputStr;
         } catch (Exception e) {
             throw new RuntimeException("Test case failed!", e);
         }
+    }
+
+    private String trim(String s) {
+        return s.trim();
     }
 
     public Class<?> getSutClass() {

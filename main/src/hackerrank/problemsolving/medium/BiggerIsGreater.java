@@ -31,7 +31,7 @@ class BiggerIsGreaterResult {
         System.out.println("BO: " + biggerOptions.toString());
         return biggerOptions.stream().map(c -> {
             List<Character> reducedOptions = new ArrayList<>(options);
-            reducedOptions.remove(reducedOptions.indexOf(c));
+            reducedOptions.remove(c);
             if (c == actualFromOriginal) {
                 return tryLargerAndEqualOptions(prefix + c, reducedOptions, original);
             } else {
@@ -42,13 +42,37 @@ class BiggerIsGreaterResult {
         }).filter(r -> r != null).findFirst().orElse(null);
     }
 
+
+
+
     public static String biggerIsGreater(String w) {
         List<Character> chars = new ArrayList<>();
-        for (char ch : w.toCharArray()) {
+        final char[] wChars = w.toCharArray();
+        for (char ch : wChars) {
             chars.add(ch);
         }
         chars.sort(Character::compareTo);
-        return Optional.ofNullable(tryLargerAndEqualOptions("", chars, w)).orElse("no answer");
+
+        final int wl = w.length();
+        Integer idx = null;
+        for (int i = wl - 2; i >= 0; i--) {
+            if (w.charAt(i) < w.charAt(i + 1)) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx == null) {
+            return "no answer";
+        } else {
+            final ArrayList<Character> remaining = new ArrayList<>(chars);
+            String prefix = w.substring(0, idx);
+            for (char c : prefix.toCharArray()) {
+                remaining.remove((Character)c);
+            }
+            final Character nextGreaterChar = remaining.get(remaining.lastIndexOf(w.charAt(idx)) + 1);
+            remaining.remove(nextGreaterChar);
+            return prefix + nextGreaterChar + concat(remaining);
+        }
     }
 
 }
