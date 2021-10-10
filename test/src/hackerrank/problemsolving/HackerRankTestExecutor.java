@@ -30,7 +30,8 @@ public class HackerRankTestExecutor {
                 .replace(".", "/") + "/" + sutClass.getSimpleName() + "/";
             String inputResourcePath = "/" + resourceFolderPath + testCaseName + "_input.txt";
             String expectedOutputResourcePath = "/" + resourceFolderPath + testCaseName + "_output.txt";
-            System.setIn(getClass().getResourceAsStream(inputResourcePath));
+            final InputStream isStdIn = getClass().getResourceAsStream(inputResourcePath);
+            System.setIn(isStdIn);
             final Method mainMethod = sutClass.getMethod("main", String[].class);
             mainMethod.invoke(null, new Object[]{new String[0]});
             final String actualOutputStr = trim(new String(Files.readAllBytes(new File(System.getenv("OUTPUT_PATH")).toPath())));
