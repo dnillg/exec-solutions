@@ -19,13 +19,13 @@ class HighestValuePalindrome_StatesTest {
     @Test
     void case0() {
         final String caseName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        CONSOLE_OUT.println(new HackerRankTestExecutor(SUT_CLASS, caseName).execute());
+        CONSOLE_OUT.println(new HackerRankTestExecutor(SUT_CLASS).executeWithResources(caseName));
     }
 
     @Test
     void case1() {
         final String caseName = Thread.currentThread().getStackTrace()[1].getMethodName();
-        CONSOLE_OUT.println(new HackerRankTestExecutor(SUT_CLASS, caseName).execute());
+        CONSOLE_OUT.println(new HackerRankTestExecutor(SUT_CLASS).executeWithResources(caseName));
     }
 
 }
